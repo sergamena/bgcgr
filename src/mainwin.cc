@@ -13,19 +13,32 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
- 
-#include<gtkmm.h>
 #include<glib/gi18n.h>
 
-#include"config.h"
 #include"mainwin.hh"
 
-int main(int argc,char**argv)
+mainwin::mainwin(void)
 {
-	setlocale(LC_ALL,"");
-	bindtextdomain(GETTEXT_PACKAGE,LOCALEDIR);
-	textdomain(GETTEXT_PACKAGE);
-	Gtk::Main kit(argc,argv);
-	mainwin window;
-	kit.run(window);
+	//declaring pointers on widgets
+	Gtk::VBox*main_vbox;
+	Gtk::HBox*hbox;
+	Gtk::Button*choose_folder;
+	//creating window
+	set_title(_("Desktop background"));
+	set_border_width(5);
+	add(*(main_vbox=Gtk::manage(new Gtk::VBox)));
+
+	main_vbox->pack_start(*(hbox=Gtk::manage(new Gtk::HBox)),Gtk::PACK_SHRINK);
+	
+	hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Choose folder:"))),
+			 Gtk::PACK_SHRINK);
+
+	main_vbox->pack_start(*(hbox=Gtk::manage(new Gtk::HBox)),Gtk::PACK_SHRINK);
+
+	hbox->pack_start(*(folder=Gtk::manage(new Gtk::ComboBoxEntry)));
+	hbox->pack_start(*(choose_folder=Gtk::manage(new Gtk::Button)));
+
+	//main_vbox->pack_start(*Gtk::);
+
+	show_all();
 }

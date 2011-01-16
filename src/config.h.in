@@ -3,9 +3,6 @@
 /* The domain to use with gettext */
 #undef GETTEXT_PACKAGE
 
-/* The locale files directory */
-#undef LOCALEDIR
-
 /* Name of package */
 #undef PACKAGE
 

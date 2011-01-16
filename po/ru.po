@@ -1,0 +1,30 @@
+# Russian translations for bgcgr package.
+# Copyright (C) 2011 Yury 'sergamena' Paramygin
+# This file is distributed under the same license as the bgcgr package.
+# Yury 'sergamena' Paramygin <ynx1534@gmail.com>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: bgcgr 0.1\n"
+"Report-Msgid-Bugs-To: <lynx1534@gmail.com>\n"
+"POT-Creation-Date: 2011-01-16 19:37+1000\n"
+"PO-Revision-Date: 2011-01-16 20:11+1000\n"
+"Last-Translator: Yury 'sergamena' Paramygin <lynx1534@gmail.com>\n"
+"Language-Team: Russian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-Language: Russian\n"
+"X-Poedit-Country: RUSSIAN FEDERATION\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#. creating window
+#: ../src/mainwin.cc:23
+msgid "Desktop background"
+msgstr "Обои рабочего стола"
+
+#: ../src/mainwin.cc:27
+msgid "Choose folder:"
+msgstr "Выберите папку:"
+

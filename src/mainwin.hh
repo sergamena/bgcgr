@@ -13,19 +13,16 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
- 
+
 #include<gtkmm.h>
-#include<glib/gi18n.h>
 
-#include"config.h"
-#include"mainwin.hh"
-
-int main(int argc,char**argv)
+class mainwin:public Gtk::Window
 {
-	setlocale(LC_ALL,"");
-	bindtextdomain(GETTEXT_PACKAGE,LOCALEDIR);
-	textdomain(GETTEXT_PACKAGE);
-	Gtk::Main kit(argc,argv);
-	mainwin window;
-	kit.run(window);
-}
+public:
+	mainwin(void);
+	virtual~mainwin(void){}
+protected:
+	//widgets
+	Gtk::ComboBoxEntry*folder;
+	
+};
