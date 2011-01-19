@@ -20,9 +20,25 @@ class mainwin:public Gtk::Window
 {
 public:
 	mainwin(void);
-	virtual~mainwin(void){}
+	virtual ~mainwin(void){}
 protected:
-	//widgets
+	Gtk::FileChooserDialog*dialog;
 	Gtk::ComboBoxEntry*folder;
-	
+
+	void on_choose_folder_clicked(void);
+	void on_ok_clicked(void);
+	void on_dialog_ok_clicked(void);
+
+	void create_model(void);
+
+	class model_columns:public Gtk::TreeModel::ColumnRecord
+	{
+	public:
+		model_columns(void);
+		Gtk::TreeModelColumn<Glib::ustring>folder_path;
+	};
+
+	model_columns columns;
+
+	Glib::RefPtr<Gtk::ListStore>folder_model;
 };

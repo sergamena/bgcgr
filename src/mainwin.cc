@@ -13,32 +13,92 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
+
 #include<glib/gi18n.h>
 
 #include"mainwin.hh"
 
 mainwin::mainwin(void)
 {
-	//declaring pointers on widgets
 	Gtk::VBox*main_vbox;
 	Gtk::HBox*hbox;
+	Gtk::HButtonBox*button_box;
 	Gtk::Button*choose_folder;
-	//creating window
+	Gtk::Button*ok;
+	Gtk::Button*cancel;
+
 	set_title(_("Desktop background"));
 	set_border_width(5);
+
 	add(*(main_vbox=Gtk::manage(new Gtk::VBox)));
 
-	main_vbox->pack_start(*(hbox=Gtk::manage(new Gtk::HBox)),Gtk::PACK_SHRINK);
+	main_vbox->pack_start(*(hbox=Gtk::manage(new Gtk::HBox)),
+		Gtk::PACK_SHRINK);
+	main_vbox->set_size_request(390);
+
+	hbox->pack_start(*Gtk::manage(new Gtk::Label(
+		_("Choose folder:"))),Gtk::PACK_SHRINK);
+
+	main_vbox->pack_start(*(hbox=Gtk::manage(new Gtk::HBox)),
+		Gtk::PACK_SHRINK,5);
+
+	create_model();
+
+	hbox->pack_start(*(folder=Gtk::manage(new Gtk::ComboBoxEntry(
+		folder_model))));
+
+	hbox->pack_start(*(choose_folder=Gtk::manage(new Gtk::Button)),
+		Gtk::PACK_SHRINK);
+
+	choose_folder->set_image(*(Gtk::manage(new Gtk::Image(
+		Gtk::Stock::DIRECTORY,Gtk::ICON_SIZE_BUTTON))));
+	choose_folder->signal_clicked().connect(sigc::mem_fun(*this,
+		&mainwin::on_choose_folder_clicked));
+
+	main_vbox->pack_start(*(button_box=Gtk::manage(
+		new Gtk::HButtonBox(Gtk::BUTTONBOX_END,5))),
+		Gtk::PACK_SHRINK);
+
+	button_box->pack_start(*(ok=Gtk::manage(new Gtk::Button(
+		Gtk::Stock::OK))));
+	button_box->pack_start(*(cancel=Gtk::manage(new Gtk::Button(
+		Gtk::Stock::CANCEL))));
 	
-	hbox->pack_start(*Gtk::manage(new Gtk::Label(_("Choose folder:"))),
-			 Gtk::PACK_SHRINK);
-
-	main_vbox->pack_start(*(hbox=Gtk::manage(new Gtk::HBox)),Gtk::PACK_SHRINK);
-
-	hbox->pack_start(*(folder=Gtk::manage(new Gtk::ComboBoxEntry)));
-	hbox->pack_start(*(choose_folder=Gtk::manage(new Gtk::Button)));
-
-	//main_vbox->pack_start(*Gtk::);
+	cancel->signal_clicked().connect(sigc::mem_fun(*this,
+		&mainwin::hide));
 
 	show_all();
+}
+
+void mainwin::on_choose_folder_clicked(void)
+{
+	dialog=new Gtk::FileChooserDialog(_("Choose folder"),
+		Gtk::FILE_CHOOSER_ACTION_SELECT_FOLDER);
+
+	Gtk::Button*ok=dialog->add_button(Gtk::Stock::OK,
+		Gtk::RESPONSE_OK);
+	Gtk::Button*cancel=dialog->add_button(Gtk::Stock::CANCEL,
+		Gtk::RESPONSE_CANCEL);
+	ok->signal_clicked().connect(sigc::mem_fun(*this,
+		&mainwin::on_dialog_ok_clicked));
+
+	dialog->run();
+	delete dialog;
+}
+
+void mainwin::on_dialog_ok_clicked(void)
+{
+	folder->get_entry()->set_text(dialog->get_filename());
+}
+
+void mainwin::create_model(void)
+{
+	folder_model=Gtk::ListStore::create(columns);
+	Gtk::TreeModel::Row row=*folder_model->append();
+	row[columns.folder_path]="/usr/share/backgrounds";
+}
+
+mainwin::model_columns::model_columns(void)
+{
+	add(folder_path);
 }

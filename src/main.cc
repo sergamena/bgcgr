@@ -14,7 +14,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor Boston, MA 02110-1301,  USA
  */
  
-#include<gtkmm.h>
+#include<gtkmm/main.h>
 #include<glib/gi18n.h>
 
 #include"config.h"
