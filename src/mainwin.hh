@@ -15,6 +15,7 @@
  */
 
 #include<gtkmm.h>
+#include<list>
 
 class mainwin:public Gtk::Window
 {
@@ -22,23 +23,28 @@ public:
 	mainwin(void);
 	virtual ~mainwin(void){}
 protected:
+	//widgets
 	Gtk::FileChooserDialog*dialog;
 	Gtk::ComboBoxEntry*folder;
-
+	//signal handlers
 	void on_choose_folder_clicked(void);
 	void on_ok_clicked(void);
 	void on_dialog_ok_clicked(void);
-
+	//methods
 	void create_model(void);
-
-	class model_columns:public Gtk::TreeModel::ColumnRecord
+	void read_history(void);
+	//column record for comboboxentry
+	class folder_columns:public Gtk::TreeModel::ColumnRecord
 	{
 	public:
-		model_columns(void);
+		folder_columns(void);
 		Gtk::TreeModelColumn<Glib::ustring>folder_path;
 	};
 
-	model_columns columns;
-
+	folder_columns columns;
+	//model for comboboxentry
 	Glib::RefPtr<Gtk::ListStore>folder_model;
+	//data
+	std::list<Glib::ustring>history_list;
+	std::string history_file;
 };

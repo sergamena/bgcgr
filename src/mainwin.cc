@@ -15,6 +15,9 @@
  */
 
 #include<glib/gi18n.h>
+#include<iostream>
+#include<fstream>
+#include<string>
 
 #include"mainwin.hh"
 
@@ -93,12 +96,54 @@ void mainwin::on_dialog_ok_clicked(void)
 
 void mainwin::create_model(void)
 {
-	folder_model=Gtk::ListStore::create(columns);
-	Gtk::TreeModel::Row row=*folder_model->append();
-	row[columns.folder_path]="/usr/share/backgrounds";
+	read_history();
+
+	if(history_list.empty())
+	{
+#ifdef DEBUG
+		std::cerr<<"No items in history_list, adding default item\n\
+ /usr/share/backgrounds\n";
+#endif
+		history_list.push_back("/usr/share/backgrounds");
+	}
+
+	Gtk::TreeModel::Row row;
+
+	for(std::list<Glib::ustring>::iterator iter=history_list.begin();
+	    iter!=history_list.end();iter++)
+	{
+		row=*folder_model->append();
+		row[columns.folder_path]=*iter;
+	}
 }
 
-mainwin::model_columns::model_columns(void)
+void mainwin::read_history(void)
+{
+	std::string config_folder=std::string(getenv("HOME"))+"/.bgcgr";
+	history_file=config_folder+"/history";
+
+	folder_model=Gtk::ListStore::create(columns);
+
+	std::ifstream history(history_file.c_str());
+
+	if(history)
+	{
+
+		std::string tmp_folder;
+
+		while(getline(history,tmp_folder))
+		{
+			history_list.push_back(tmp_folder);
+		}
+	}
+	else
+	{
+		std::cerr<<"Warning: failed to open history file for read.\n\
+ Probably it does not exist or empty.\n";
+	}
+}
+
+mainwin::folder_columns::folder_columns(void)
 {
 	add(folder_path);
 }
