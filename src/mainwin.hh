@@ -33,6 +33,7 @@ protected:
 	//methods
 	void create_model(void);
 	void read_history(void);
+	void write_history(void);
 	//column record for comboboxentry
 	class folder_columns:public Gtk::TreeModel::ColumnRecord
 	{

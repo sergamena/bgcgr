@@ -64,6 +64,10 @@ mainwin::mainwin(void)
 
 	button_box->pack_start(*(ok=Gtk::manage(new Gtk::Button(
 		Gtk::Stock::OK))));
+
+		ok->signal_clicked().connect(sigc::mem_fun(*this,
+		&mainwin::on_ok_clicked));
+
 	button_box->pack_start(*(cancel=Gtk::manage(new Gtk::Button(
 		Gtk::Stock::CANCEL))));
 	
@@ -89,6 +93,12 @@ void mainwin::on_choose_folder_clicked(void)
 	delete dialog;
 }
 
+void mainwin::on_ok_clicked(void)
+{
+	write_history();
+	hide();
+}
+
 void mainwin::on_dialog_ok_clicked(void)
 {
 	folder->get_entry()->set_text(dialog->get_filename());
@@ -97,15 +107,6 @@ void mainwin::on_dialog_ok_clicked(void)
 void mainwin::create_model(void)
 {
 	read_history();
-
-	if(history_list.empty())
-	{
-#ifdef DEBUG
-		std::cerr<<"No items in history_list, adding default item\n\
- /usr/share/backgrounds\n";
-#endif
-		history_list.push_back("/usr/share/backgrounds");
-	}
 
 	Gtk::TreeModel::Row row;
 
@@ -122,9 +123,9 @@ void mainwin::read_history(void)
 	std::string config_folder=std::string(getenv("HOME"))+"/.bgcgr";
 	history_file=config_folder+"/history";
 
-	folder_model=Gtk::ListStore::create(columns);
-
 	std::ifstream history(history_file.c_str());
+
+	folder_model=Gtk::ListStore::create(columns);
 
 	if(history)
 	{
@@ -133,7 +134,9 @@ void mainwin::read_history(void)
 
 		while(getline(history,tmp_folder))
 		{
-			history_list.push_back(tmp_folder);
+			if((Gio::File::create_for_path(tmp_folder)->query_file_type())==
+				Gio::FILE_TYPE_DIRECTORY)
+				history_list.push_back(tmp_folder);
 		}
 	}
 	else
@@ -141,6 +144,26 @@ void mainwin::read_history(void)
 		std::cerr<<"Warning: failed to open history file for read.\n\
  Probably it does not exist or empty.\n";
 	}
+
+	if(history_list.empty())
+	{
+#ifdef DEBUG
+		std::cerr<<"No items in history_list, adding default item\n"<<
+			BACKGROUNDDIR<<"\n";
+#endif
+		if((Gio::File::create_for_path(BACKGROUNDDIR)->
+		    query_file_type())==Gio::FILE_TYPE_DIRECTORY)
+			history_list.push_back(BACKGROUNDDIR);
+#ifdef DEBUG
+		else
+			std::cerr<<"Not Added, because does not exist.\n";
+#endif
+	}
+}
+
+void mainwin::write_history(void)
+{
+	
 }
 
 mainwin::folder_columns::folder_columns(void)

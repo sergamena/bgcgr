@@ -564,6 +564,7 @@ LIBOBJS
 GTKMM_LIBS
 GTKMM_CFLAGS
 PKG_CONFIG
+BACKGROUNDDIR
 LOCALEDIR
 GETTEXT_PACKAGE
 DATADIRNAME
@@ -4382,6 +4383,7 @@ fi
 
 
 
+# For intltool
 LOCALEDIR=${localedir}
 GETTEXT_PACKAGE=$PACKAGE
 
@@ -4390,6 +4392,10 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
+
+
+# backgrounddir
+BACKGROUNDDIR=${datadir}/backgrounds
 
 
 # Checks for gtkmm

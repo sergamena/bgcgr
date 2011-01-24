@@ -74,6 +74,7 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BACKGROUNDDIR = @BACKGROUNDDIR@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
@@ -170,7 +171,9 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-AM_CPPFLAGS = -DLOCALEDIR=\"@LOCALEDIR@\" @GTKMM_CFLAGS@
+AM_CPPFLAGS = -DLOCALEDIR=\"@LOCALEDIR@\" -DBACKGROUNDDIR=\"@BACKGROUNDDIR@\" \
+ @GTKMM_CFLAGS@
+
 bgcgr_SOURCES = main.cc mainwin.cc mainwin.hh
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am

@@ -12,12 +12,17 @@ AM_INIT_AUTOMAKE
 AC_PROG_CXX
 IT_PROG_INTLTOOL([0.40.4])
 
+# For intltool
 LOCALEDIR=${localedir}
 GETTEXT_PACKAGE=$PACKAGE
 AC_DEFINE_UNQUOTED([GETTEXT_PACKAGE],["$GETTEXT_PACKAGE"],
 	[The domain to use with gettext])
 AC_SUBST(GETTEXT_PACKAGE)
 AC_SUBST(LOCALEDIR)
+
+# backgrounddir
+BACKGROUNDDIR=${datadir}/backgrounds
+AC_SUBST(BACKGROUNDDIR)
 
 # Checks for gtkmm
 PKG_CHECK_MODULES([GTKMM],[gtkmm-2.4 >= 2.8.0])
