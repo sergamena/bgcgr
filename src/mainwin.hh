@@ -15,7 +15,7 @@
  */
 
 #include<gtkmm.h>
-#include<list>
+#include<set>
 
 class mainwin:public Gtk::Window
 {
@@ -46,6 +46,6 @@ protected:
 	//model for comboboxentry
 	Glib::RefPtr<Gtk::ListStore>folder_model;
 	//data
-	std::list<Glib::ustring>history_list;
+	std::set<Glib::ustring>history_list;
 	std::string history_file;
 };

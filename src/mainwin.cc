@@ -15,6 +15,8 @@
  */
 
 #include<glib/gi18n.h>
+#include<algorithm>
+#include<iterator>
 #include<iostream>
 #include<fstream>
 #include<string>
@@ -95,8 +97,38 @@ void mainwin::on_choose_folder_clicked(void)
 
 void mainwin::on_ok_clicked(void)
 {
-	write_history();
-	hide();
+	Glib::ustring selected_path=folder->get_entry()->get_text();
+	if(!selected_path.empty())
+	{
+		if(Gio::File::create_for_path(selected_path)->query_file_type()==
+				Gio::FILE_TYPE_DIRECTORY)
+		{
+			history_list.insert(selected_path);
+			write_history();
+			hide();
+		}
+		else
+		{
+			Gtk::MessageDialog dialog(_("Incorrect path!"),
+			                       false,
+			                       Gtk::MESSAGE_ERROR,
+			                       Gtk::BUTTONS_CLOSE);
+			dialog.set_secondary_text(_("Input path manually or choose "\
+			"folder from drop-down menu or using dialog."));
+			dialog.run();
+		}
+
+	}
+	else
+	{
+		Gtk::MessageDialog dialog(_("Input path!"),
+			                       false,
+			                       Gtk::MESSAGE_ERROR,
+			                       Gtk::BUTTONS_CLOSE);
+		dialog.set_secondary_text(_("Input path manually or choose "\
+			"folder from drop-down menu or using dialog."));
+		dialog.run();
+	}
 }
 
 void mainwin::on_dialog_ok_clicked(void)
@@ -110,7 +142,7 @@ void mainwin::create_model(void)
 
 	Gtk::TreeModel::Row row;
 
-	for(std::list<Glib::ustring>::iterator iter=history_list.begin();
+	for(std::set<Glib::ustring>::const_iterator iter=history_list.begin();
 	    iter!=history_list.end();iter++)
 	{
 		row=*folder_model->append();
@@ -132,11 +164,11 @@ void mainwin::read_history(void)
 
 		std::string tmp_folder;
 
-		while(getline(history,tmp_folder))
+		for(int i=0;(getline(history,tmp_folder))||(i>9);i++)
 		{
-			if((Gio::File::create_for_path(tmp_folder)->query_file_type())==
-				Gio::FILE_TYPE_DIRECTORY)
-				history_list.push_back(tmp_folder);
+			if((Gio::File::create_for_path(tmp_folder)->query_file_type()==
+				Gio::FILE_TYPE_DIRECTORY)&&(!tmp_folder.empty()))
+				history_list.insert(tmp_folder);
 		}
 	}
 	else
@@ -151,9 +183,9 @@ void mainwin::read_history(void)
 		std::cerr<<"No items in history_list, adding default item\n"<<
 			BACKGROUNDDIR<<"\n";
 #endif
-		if((Gio::File::create_for_path(BACKGROUNDDIR)->
-		    query_file_type())==Gio::FILE_TYPE_DIRECTORY)
-			history_list.push_back(BACKGROUNDDIR);
+		if(Gio::File::create_for_path(BACKGROUNDDIR)->
+		    query_file_type()==Gio::FILE_TYPE_DIRECTORY)
+			history_list.insert(BACKGROUNDDIR);
 #ifdef DEBUG
 		else
 			std::cerr<<"Not Added, because does not exist.\n";
@@ -163,7 +195,10 @@ void mainwin::read_history(void)
 
 void mainwin::write_history(void)
 {
-	
+	std::ofstream history(history_file.c_str());
+
+	std::ostream_iterator<Glib::ustring>iter(history,"\n");
+	std::copy(history_list.begin(),history_list.end(),iter);
 }
 
 mainwin::folder_columns::folder_columns(void)
