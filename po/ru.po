@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: bgcgr 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-25 07:09+1000\n"
+"POT-Creation-Date: 2011-01-26 06:43+1000\n"
 "PO-Revision-Date: 2011-01-16 20:11+1000\n"
 "Last-Translator: Yury 'sergamena' Paramygin <lynx1534@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -32,17 +32,16 @@ msgstr "Выберите папку:"
 msgid "Choose folder"
 msgstr "Выберите папку"
 
-#: ../src/mainwin.cc:112
+#: ../src/mainwin.cc:111
 msgid "Incorrect path!"
 msgstr "Неверный путь!"
 
-#: ../src/mainwin.cc:116 ../src/mainwin.cc:128
+#: ../src/mainwin.cc:115
 msgid ""
 "Input path manually or choose folder from drop-down menu or using dialog."
 msgstr ""
 "Введите путь вручную или выберите папку из выпадающего меню или с помощью "
 "диалога."
 
-#: ../src/mainwin.cc:124
-msgid "Input path!"
-msgstr "Введите путь!"
+#~ msgid "Input path!"
+#~ msgstr "Введите путь!"

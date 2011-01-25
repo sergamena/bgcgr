@@ -98,33 +98,20 @@ void mainwin::on_choose_folder_clicked(void)
 void mainwin::on_ok_clicked(void)
 {
 	Glib::ustring selected_path=folder->get_entry()->get_text();
-	if(!selected_path.empty())
+	if((!selected_path.empty())
+		&&(Gio::File::create_for_path(selected_path)->query_file_type()==
+		Gio::FILE_TYPE_DIRECTORY))
 	{
-		if(Gio::File::create_for_path(selected_path)->query_file_type()==
-				Gio::FILE_TYPE_DIRECTORY)
-		{
-			history_list.insert(selected_path);
-			write_history();
-			hide();
-		}
-		else
-		{
-			Gtk::MessageDialog dialog(_("Incorrect path!"),
-			                       false,
-			                       Gtk::MESSAGE_ERROR,
-			                       Gtk::BUTTONS_CLOSE);
-			dialog.set_secondary_text(_("Input path manually or choose "\
-			"folder from drop-down menu or using dialog."));
-			dialog.run();
-		}
-
+		history_list.insert(selected_path);
+		write_history();
+		hide();
 	}
 	else
 	{
-		Gtk::MessageDialog dialog(_("Input path!"),
-			                       false,
-			                       Gtk::MESSAGE_ERROR,
-			                       Gtk::BUTTONS_CLOSE);
+		Gtk::MessageDialog dialog(_("Incorrect path!"),
+		                       false,
+		                       Gtk::MESSAGE_ERROR,
+		                       Gtk::BUTTONS_CLOSE);
 		dialog.set_secondary_text(_("Input path manually or choose "\
 			"folder from drop-down menu or using dialog."));
 		dialog.run();
@@ -173,8 +160,8 @@ void mainwin::read_history(void)
 	}
 	else
 	{
-		std::cerr<<"Warning: failed to open history file for read.\n\
- Probably it does not exist or empty.\n";
+		std::cerr<<"Warning: failed to open history file for read.\n"\
+			"Probably it does not exist or empty.\n";
 	}
 
 	if(history_list.empty())
